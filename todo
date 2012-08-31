@@ -1,0 +1,14 @@
+
+Simulations to do:
+1. Memory packing alone ?? 
+
+Problem -- no idea about interference ??
+SOl - curtain intef to say 10%
+
+
+2 Queues?? 
+
+Random CL, CM, CH and async, sync etc ?? .. then simulate ??  -- compare with dedicated case -- even with cache dedication... ??
+Compare with that.. incorp same algo (say at max 10-15% interference) ??
+
+

@@ -1,0 +1,2 @@
+javac -classpath jars/cloudsim-3.0.jar:examples examples/org/cloudbus/cloudsim/examples/CloudSimExampleWorkload.java
+java -classpath jars/cloudsim-3.0.jar:examples org.cloudbus.cloudsim.examples.CloudSimExampleWorkload > result
