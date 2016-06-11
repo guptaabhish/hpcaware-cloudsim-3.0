@@ -54,6 +54,10 @@ public class Vm {
 
 	/** The host. */
 	private Host host;
+	
+	
+
+	private List<Host> hosts;
 
 	/** In migration flag. */
 	private boolean inMigration;
@@ -63,6 +67,8 @@ public class Vm {
 
 	/** The current allocated ram. */
 	private int currentAllocatedRam;
+
+	private long cacheScore;
 
 	/** The current allocated bw. */
 	private long currentAllocatedBw;
@@ -121,7 +127,7 @@ public class Vm {
 
 		setInMigration(false);
 		setBeingInstantiated(true);
-
+		setHosts(new ArrayList<Host>());
 		setCurrentAllocatedBw(0);
 		setCurrentAllocatedMips(null);
 		setCurrentAllocatedRam(0);
@@ -430,7 +436,7 @@ public class Vm {
 	 * @post $none
 	 */
 	public void setHost(Host host) {
-		this.host = host;
+		this.host=host;
 	}
 
 	/**
@@ -606,4 +612,18 @@ public class Vm {
 		getStateHistory().add(newState);
 	}
 
+	public List<Host> getHosts() {
+		return hosts;
+	}
+
+	public void setHosts(List<Host> hosts) {
+		this.hosts = hosts;
+	}
+	public long getCacheScore() {
+		return cacheScore;
+	}
+
+	public void setCacheScore(long cacheScore) {
+		this.cacheScore = cacheScore;
+	}
 }

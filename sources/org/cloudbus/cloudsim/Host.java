@@ -28,7 +28,7 @@ public class Host {
 
 	/** The id. */
 	private int id;
-
+	private long availableCacheScore;
 	/** The storage. */
 	private long storage;
 
@@ -144,7 +144,8 @@ public class Host {
 			getVmsMigratingIn().add(vm);
 			getVmList().add(vm);
 			updateVmsProcessing(CloudSim.clock());
-			vm.getHost().updateVmsProcessing(CloudSim.clock());
+			for(Host host:vm.getHosts())
+			host.updateVmsProcessing(CloudSim.clock());
 		}
 	}
 
@@ -230,7 +231,7 @@ public class Host {
 
 		setStorage(getStorage() - vm.getSize());
 		getVmList().add(vm);
-		vm.setHost(this);
+		vm.getHosts().add(this);
 		return true;
 	}
 
@@ -394,6 +395,9 @@ public class Host {
 		return getVmScheduler().getAvailableMips();
 	}
 
+	public double getAvailableRam() {
+		return getRamProvisioner().getAvailableRam();
+	}
 	/**
 	 * Gets the machine bw.
 	 * 
@@ -617,6 +621,13 @@ public class Host {
 	 */
 	public void setDatacenter(Datacenter datacenter) {
 		this.datacenter = datacenter;
+	}
+	public long getAvailableCacheScore() {
+		return availableCacheScore;
+	}
+
+	public void setAvailableCacheScore(long availableCacheScore) {
+		this.availableCacheScore = availableCacheScore;
 	}
 
 }

@@ -1,0 +1,65 @@
+; Version: 2.2
+; Computer: MetaCentrum grid
+; Installation: Czech national grid
+; Acknowledge: Dalibor Klusacek
+; Information: http://meta.cesnet.cz/
+;              http://www.cs.huji.ac.il/labs/parallel/workload/
+; Conversion: Nati Zakay (netanel.zakay@mail.huji.ac.il) 13 Dec 2011
+; MaxJobs: 103656
+; MaxRecords: 103656
+; Preemption: No
+; UnixStartTime: 1228910204
+; TimeZone: 3600
+; TimeZoneString: Europe/Prague
+; StartTime: Wed Dec 10 12:56:44 CET 2008
+; EndTime:   Fri Jun 26 10:25:21 CEST 2009
+; MaxNodes: 806
+; MaxProcs: 806
+; Note: uses the PBSpro scheduler
+; Queues: for each queue there are two fields.
+; MaxQueues: 11
+; Queue:  1  q1     (pri=62, 720hr)
+; Queue:  2  q2     (pri=70, 720hr)
+; Queue:  3  q3     (pri=50, 24hr)
+; Queue:  4  q4     (pri=60, 2hr)
+; Queue:  5  q5     (pri=80, 24hr)
+; Queue:  6  q6     (pri=65, 720hr)
+; Queue:  7  q7     (pri=70, 720hr)
+; Queue:  8  q8     (pri=70, 4hr)
+; Queue:  9  q9     (pri=70, 720hr)
+; Queue: 10  q10    (pri=99, 720hr)
+; Queue: 11  q11    (pri=65, 720hr)
+; MaxPartitions: 14
+; Partition:  1  0     (Itanium2 1.5GHz,  8 nodes,   8 CPUs)
+; Partition:  2  1     (Opteron  2.2GHz, 16 nodes,  16 CPUs)
+; Partition:  3  2     (Xeon     3.2GHz, 10 nodes,  10 CPUs)
+; Partition:  4  3     (Opteron  2.6GHz,  5 nodes,  80 CPUs)
+; Partition:  5  4     (AthlonMP 1.6GHz, 16 nodes,  32 CPUs)
+; Partition:  6  5     (Xeon     2.4GHz, 32 nodes,  64 CPUs)
+; Partition:  7  6     (Xeon     2.7GHz, 36 nodes, 148 CPUs)
+; Partition:  8  7     (Xeon     3.1GHz, 35 nodes,  70 CPUs)
+; Partition:  9  8     (Opteron  1.6GHz, 10 nodes,  20 CPUs)
+; Partition: 10  9     (Opteron  2.4GHz,  3 nodes,   6 CPUs)
+; Partition: 11  10    (Opteron  2.0GHz, 23 nodes,  92 CPUs)
+; Partition: 12  11    (Xeon     3.0GHz, 19 nodes, 152 CPUs)
+; Partition: 13  12    (Xeon     2.7GHz,  8 nodes,  64 CPUs)
+; Partition: 14  13    (Xeon     2.3GHz, 11 nodes,  44 CPUs)
+;
+    1        0     65 2592042    1     -1 1009884   -1     -1    -1  0   1  -1  -1  2  9 -1 -1 2
+    2        0     71 2592046    1     -1 1010132   -1     -1    -1  0   1  -1  -1  2  9 -1 -1 1 
+    3       19 1038341 1893368    1     -1 1010108   -1     -1    -1  0   1  -1  -1  2  9 -1 -1 4 
+    4       19 1038342 1825976    1     -1  2172   -1     -1    -1  0   1  -1  -1  2  9 -1 -1 2
+    5   516420     15 2592030    2     -1  4940   -1     -1    -1  0   2  -1  -1  1  8 -1 -1 2 
+    6  1284365     26 2012962    1     -1 14088   -1     -1    -1  1   3  -1  -1  1  8 -1 -1 3
+    7  1284365     26 2290213    1     -1 13556   -1     -1    -1  1   3  -1  -1  1  8 -1 -1 2
+    8  1284365     28 2058925    1     -1 14124   -1     -1    -1  1   3  -1  -1  1  8 -1 -1 4
+    9  1284366     26 1782465    1     -1 14584   -1     -1    -1  1   3  -1  -1  1  8 -1 -1 1
+   10  1284366     27 1831699    1     -1 14112   -1     -1    -1  1   3  -1  -1  1  8 -1 -1 1
+   11  1389267    351 1573008    1     -1 351604   -1     -1    -1  0   4  -1  -1  1  8 -1 -1 2
+   12  1389297    332 1572997    1     -1 351028   -1     -1    -1  0   4  -1  -1  1  8 -1 -1 1
+   13  1477792      6 1484828    1     -1 351504   -1     -1    -1  0   4  -1  -1  1  8 -1 -1 2
+   14  1480061     23 1482543    1     -1 352136   -1     -1    -1  0   4  -1  -1  1  8 -1 -1 2 
+   15  1666234     26 312610    1     -1 1690068   -1     -1    -1  0   5  -1  -1  2 11 -1 -1 8
+   16  1669900      9 262547    1     -1 1558900   -1     -1    -1  0   5  -1  -1  2 11 -1 -1 8
+   17  1734699      8 1227924    1     -1 351792   -1     -1    -1  0   4  -1  -1  1  8 -1 -1 1
+   18  1764991      5  92810    8     -1 2989520   -1     -1    -1  0   6  -1  -1  6  1 -1 -1 16

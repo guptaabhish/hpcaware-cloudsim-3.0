@@ -15,6 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Enumeration;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
@@ -66,7 +67,7 @@ public class WorkloadFileReader implements WorkloadModel {
 	private final int rating; // a PE rating
 
 	private ArrayList<Cloudlet> jobs = null; // a list for getting all the
-
+	private Random randomGenerator = null;
 	// Gridlets
 
 	// using Standard Workload Format
@@ -77,6 +78,7 @@ public class WorkloadFileReader implements WorkloadModel {
 	private final int RUN_TIME = 4 - 1; // running time of a Gridlet
 
 	private final int NUM_PROC = 5 - 1; // number of processors needed for a
+	private final int MEMORY_CORE = 7 - 1; // number of processors needed for a
 
 	// Gridlet
 	private int REQ_NUM_PROC = 8 - 1; // required number of processors
@@ -86,6 +88,7 @@ public class WorkloadFileReader implements WorkloadModel {
 	private final int USER_ID = 12 - 1; // if of user who submitted the job
 
 	private final int GROUP_ID = 13 - 1; // if of group of the user who
+	private int REQ_NUM_PROC_CLOUD = 19 - 1; // required number of processors
 
 	// submitted the
 	// job
@@ -264,6 +267,8 @@ public class WorkloadFileReader implements WorkloadModel {
 	 * @pre numProc > 0
 	 * @post $none
 	 */
+
+//ABHI: hack - pass memory as filesize param
 	private void createJob(
 			final int id,
 			final long submitTime,
@@ -271,7 +276,8 @@ public class WorkloadFileReader implements WorkloadModel {
 			final int numProc,
 			final int reqRunTime,
 			final int userID,
-			final int groupID) {
+			final int groupID,
+			final long memory) {
 		// create the cloudlet
 		final int len = runTime * rating;
 		UtilizationModel utilizationModel = new UtilizationModelFull();
@@ -279,11 +285,18 @@ public class WorkloadFileReader implements WorkloadModel {
 				id,
 				len,
 				numProc,
-				0,
+				memory,
 				0,
 				utilizationModel,
 				utilizationModel,
 				utilizationModel);
+
+//	Log.printLine("Setting cloudlet submit time " + submitTime );
+
+	//	wgl.setSubmissionTime(submitTime);
+	//	wgl.cloudletArrivalTime = (100.0);
+		wgl.cloudletArrivalTime = submitTime/1000;
+		wgl.cloudletpe_cloud = randomGenerator.nextInt(8);
 		jobs.add(wgl);
 	}
 
@@ -334,6 +347,10 @@ public class WorkloadFileReader implements WorkloadModel {
 			obj = new Integer(array[REQ_NUM_PROC].trim());
 			int numProc = obj.intValue();
 
+			// get the number of allocated processors
+		//	obj = new Integer(array[REQ_NUM_PROC_CLOUD].trim());
+		//	int numProc_cloud = obj.intValue();
+
 			// if the required num of allocated processors field is ignored
 			// or zero, then use the actual field
 			if (numProc == IRRELEVANT || numProc == 0) {
@@ -345,7 +362,11 @@ public class WorkloadFileReader implements WorkloadModel {
 			if (numProc <= 0) {
 				numProc = 1;
 			}
-			createJob(id, submitTime, runTime, numProc, reqRunTime, userID, groupID);
+
+		final Long p  = new Long(array[MEMORY_CORE].trim());
+			final long memory = p.intValue();
+
+			createJob(id, submitTime, runTime, numProc, reqRunTime, userID, groupID, memory);
 		} catch (final Exception e) {
 
 		}
@@ -399,6 +420,8 @@ public class WorkloadFileReader implements WorkloadModel {
 	private boolean readFile(final File fl) throws IOException, FileNotFoundException {
 		boolean success = false;
 		BufferedReader reader = null;
+		int seed = 1123;
+                randomGenerator = new Random(seed);
 		try {
 			reader = new BufferedReader(new InputStreamReader(new FileInputStream(fl)));
 

@@ -90,7 +90,8 @@ public class Cloudlet {
 
 	/** The ToS for sending Cloudlet over the network. */
 	private int netToS;
-
+	public double cloudletArrivalTime;
+	public int  cloudletpe_cloud;
 	// //////////////////////////////////////////
 	// Below are CONSTANTS attributes
 	/** The Cloudlet has been created and added to the CloudletList object. */

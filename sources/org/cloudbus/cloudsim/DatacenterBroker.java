@@ -54,6 +54,8 @@ public class DatacenterBroker extends SimEntity {
 
 	/** The vms acks. */
 	protected int vmsAcks;
+ 
+public int POLICY = 0;
 
 	/** The vms destroyed. */
 	protected int vmsDestroyed;
@@ -69,6 +71,96 @@ public class DatacenterBroker extends SimEntity {
 
 	/** The datacenter characteristics list. */
 	protected Map<Integer, DatacenterCharacteristics> datacenterCharacteristicsList;
+
+// each row is an app, within that first each pe 1, 2, 4, 8, 16, 32, 64, 128, 256
+	private double [][][] slowdownTable = {
+
+{ { 0.916033,  0.881993}, {0.916308,  0.929236}, {0.925102, 0.901044}, {0.99184, 0.901179 }, {0.951087, 0.972826}, {0.985507, 1.22101}, {0.978261, 1.16667}, {1.33333,  0.956522}, {2.05714, 1.6}}, 
+
+{{0.613848, 0.355239},
+{0.494952, 0.425873},
+{0.450863, 0.334441},
+{0.746916, 0.639302},
+{1.06181, 1.09343},
+{0.917296, 1.61083},
+{1.43536, 2.68692},
+{1.80851, 5.00665},
+{2.46875, 12.8341}},
+
+
+{{0.742406, 0.501823},
+{0.927907, 1.00233},
+{1.01017, 2.54915},
+{2.55975, 3.10063},
+{4.9596, 6.52525},
+{10.1875, 7.225},
+{24.6923, 23.5},
+{54.5556, 153.711},
+{110.557, 467.508}},
+
+{{0.567273, 0.558},
+{0.630282, 0.570423},
+{0.632653, 0.62585},
+{0.74026, 0.883117},
+{0.833333, 0.97619},
+{0.904762, 1.2381},
+{1.41414, 1.81818},
+{1.52542, 2.0339},
+{1.46341, 2.43902}},
+
+{{0.495572, 0.476015},
+{0.501105, 0.512159},
+{0.507937, 0.558442},
+{0.528571, 0.685714},
+{0.819767, 1.09302},
+{1.3908, 1.6092},
+{1.62105, 2.52632},
+{2.25926, 4.81481},
+{3.46154, 22.4359}},
+
+{{0.776753, 0.747923},
+{0.782595, 0.798247},
+{0.812077, 0.792296},
+{0.714314, 0.753637},
+{0.741493, 0.781337},
+{0.733179, 0.764114},
+{0.647292, 0.726552},
+{0.592668, 0.674134},
+{0.75, 0.946429}},
+
+{{0.21494, 0.219518},
+{0.254902, 0.269866},
+{0.226355, 0.41339},
+{0.392857, 0.546218},
+{0.447154, 0.914634},
+{0.570312, 1.59375},
+{0.766234, 2.33766},
+{0.982143, 3.30357},
+{2.33333, 2.42222}},
+
+{{0.857711, 0.490121},
+{0.725959, 0.667882},
+{0.588508, 2.5659},
+{0.803498, 3.52646},
+{1.0071, 5.37836},
+{0.919887, 5.67853},
+{0.703059, 4.3824},
+{1.03367, 6.88586},
+{7.19821, 6.3507}},
+	};
+
+
+
+//	private int [][][] slowdownTable = new int [6][9][2];
+
+/* { {{1, 1, 1, 1, 1, 1, 1, 1, 1 }, {2, 2, 2, 2, 2, 2, 2, 2, 2} },  
+  {{1, 1, 1, 1, 1, 1, 1, 1, 1 }, {2, 2, 2, 2, 2, 2, 2, 2, 2} },   
+ {{1, 1, 1, 1, 1, 1, 1, 1, 1 }, {2, 2, 2, 2, 2, 2, 2, 2, 2} },  
+  {{1, 1, 1, 1, 1, 1, 1, 1, 1 }, {2, 2, 2, 2, 2, 2, 2, 2, 2} }, 
+   {{1, 1, 1, 1, 1, 1, 1, 1, 1 }, {2, 2, 2, 2, 2, 2, 2, 2, 2} },  
+  {{1, 1, 1, 1, 1, 1, 1, 1, 1 }, {2, 2, 2, 2, 2, 2, 2, 2, 2} },                                                       	  
+	};
+*/
 
 	/**
 	 * Created a new DatacenterBroker object.
@@ -97,6 +189,128 @@ public class DatacenterBroker extends SimEntity {
 		setDatacenterRequestedIdsList(new ArrayList<Integer>());
 		setVmsToDatacentersMap(new HashMap<Integer, Integer>());
 		setDatacenterCharacteristicsList(new HashMap<Integer, DatacenterCharacteristics>());
+//cluster
+	/*	slowdownTable[0][0][0] = 1;
+		slowdownTable[0][1][0] = 1;
+		slowdownTable[0][2][0] = 1;
+		slowdownTable[0][3][0] = 1;
+		slowdownTable[0][4][0] = 1;
+		slowdownTable[0][5][0] = 1;
+		slowdownTable[0][6][0] = 1;
+		slowdownTable[0][7][0] = 1;
+		slowdownTable[0][8][0] = 1;
+
+		slowdownTable[0][0][1] = 2;
+		slowdownTable[0][1][1] = 2;
+		slowdownTable[0][2][1] = 2;
+		slowdownTable[0][3][1] = 2;
+		slowdownTable[0][4][1] = 2;
+		slowdownTable[0][5][1] = 2;
+		slowdownTable[0][6][1] = 2;
+		slowdownTable[0][7][1] = 2;
+		slowdownTable[0][8][1] = 2;
+
+		slowdownTable[1][0][0] = 1;
+		slowdownTable[1][1][0] = 1;
+		slowdownTable[1][2][0] = 1;
+		slowdownTable[1][3][0] = 1;
+		slowdownTable[1][4][0] = 1;
+		slowdownTable[1][5][0] = 1;
+		slowdownTable[1][6][0] = 1;
+		slowdownTable[1][7][0] = 1;
+		slowdownTable[1][8][0] = 1;
+
+		slowdownTable[1][0][1] = 2;
+		slowdownTable[1][1][1] = 2;
+		slowdownTable[1][2][1] = 2;
+		slowdownTable[1][3][1] = 2;
+		slowdownTable[1][4][1] = 2;
+		slowdownTable[1][5][1] = 2;
+		slowdownTable[1][6][1] = 2;
+		slowdownTable[1][7][1] = 2;
+		slowdownTable[1][8][1] = 2;
+
+		slowdownTable[2][0][0] = 1;
+		slowdownTable[2][1][0] = 1;
+		slowdownTable[2][2][0] = 1;
+		slowdownTable[2][3][0] = 1;
+		slowdownTable[2][4][0] = 1;
+		slowdownTable[2][5][0] = 1;
+		slowdownTable[2][6][0] = 1;
+		slowdownTable[2][7][0] = 1;
+		slowdownTable[2][8][0] = 1;
+
+		slowdownTable[2][0][1] = 2;
+		slowdownTable[2][1][1] = 2;
+		slowdownTable[2][2][1] = 2;
+		slowdownTable[2][3][1] = 2;
+		slowdownTable[2][4][1] = 2;
+		slowdownTable[2][5][1] = 2;
+		slowdownTable[2][6][1] = 2;
+		slowdownTable[2][7][1] = 2;
+		slowdownTable[2][8][1] = 2;
+
+		slowdownTable[3][0][0] = 1;
+		slowdownTable[3][1][0] = 1;
+		slowdownTable[3][2][0] = 1;
+		slowdownTable[3][3][0] = 1;
+		slowdownTable[3][4][0] = 1;
+		slowdownTable[3][5][0] = 1;
+		slowdownTable[3][6][0] = 1;
+		slowdownTable[3][7][0] = 1;
+		slowdownTable[3][8][0] = 1;
+
+		slowdownTable[3][0][1] = 2;
+		slowdownTable[3][1][1] = 2;
+		slowdownTable[3][2][1] = 2;
+		slowdownTable[3][3][1] = 2;
+		slowdownTable[3][4][1] = 2;
+		slowdownTable[3][5][1] = 2;
+		slowdownTable[3][6][1] = 2;
+		slowdownTable[3][7][1] = 2;
+		slowdownTable[3][8][1] = 2;
+
+		slowdownTable[4][0][0] = 1;
+		slowdownTable[4][1][0] = 1;
+		slowdownTable[4][2][0] = 1;
+		slowdownTable[4][3][0] = 1;
+		slowdownTable[4][4][0] = 1;
+		slowdownTable[4][5][0] = 1;
+		slowdownTable[4][6][0] = 1;
+		slowdownTable[4][7][0] = 1;
+		slowdownTable[4][8][0] = 1;
+
+		slowdownTable[4][0][1] = 2;
+		slowdownTable[4][1][1] = 2;
+		slowdownTable[4][2][1] = 2;
+		slowdownTable[4][3][1] = 2;
+		slowdownTable[4][4][1] = 2;
+		slowdownTable[4][5][1] = 2;
+		slowdownTable[4][6][1] = 2;
+		slowdownTable[4][7][1] = 2;
+		slowdownTable[4][8][1] = 2;
+
+
+		slowdownTable[5][0][0] = 1;
+		slowdownTable[5][1][0] = 1;
+		slowdownTable[5][2][0] = 1;
+		slowdownTable[5][3][0] = 1;
+		slowdownTable[5][4][0] = 1;
+		slowdownTable[5][5][0] = 1;
+		slowdownTable[5][6][0] = 1;
+		slowdownTable[5][7][0] = 1;
+		slowdownTable[5][8][0] = 1;
+
+		slowdownTable[5][0][1] = 2;
+		slowdownTable[5][1][1] = 2;
+		slowdownTable[5][2][1] = 2;
+		slowdownTable[5][3][1] = 2;
+		slowdownTable[5][4][1] = 2;
+		slowdownTable[5][5][1] = 2;
+		slowdownTable[5][6][1] = 2;
+		slowdownTable[5][7][1] = 2;
+		slowdownTable[5][8][1] = 2;
+*/
 	}
 
 	/**
@@ -206,6 +420,9 @@ public class DatacenterBroker extends SimEntity {
 		for (Integer datacenterId : getDatacenterIdsList()) {
 			sendNow(datacenterId, CloudSimTags.RESOURCE_CHARACTERISTICS, getId());
 		}
+		Log.printLine(CloudSim.clock() + ": " + getName() + ":Sending periodic timer ");
+		send(getId(),0.5,CloudSimTags.PERIODIC_EVENT,getId());
+
 	}
 
 	/**
@@ -218,25 +435,33 @@ public class DatacenterBroker extends SimEntity {
 	protected void processVmCreate(SimEvent ev) {
 		int[] data = (int[]) ev.getData();
 		int datacenterId = data[0];
+//	Log.printLine("Inside process VM ");
 		int vmId = data[1];
 		int result = data[2];
-
+//	Log.printLine("Inside process VM ");
+	//		Log.printLine(CloudSim.clock() + ": " + getName() + ": VM #" + vmId
+	//				+ " has been created in Datacenter #" + datacenterId + ", Host #"
+	//				+ VmList.getById(getVmsCreatedList(), vmId).getHost().getId());
+//	Log.printLine("Inside process VM ");
 		if (result == CloudSimTags.TRUE) {
-			getVmsToDatacentersMap().put(vmId, datacenterId);
+//		Log.printLine(CloudSim.clock() + ": " + getName() + ": Creation of VM #" + vmId
+//					+ " Succeeded in Datacenter #" + datacenterId);
+//UNCOMMENT THIS 	getVmsToDatacentersMap().put(vmId, datacenterId);
 			getVmsCreatedList().add(VmList.getById(getVmList(), vmId));
-			Log.printLine(CloudSim.clock() + ": " + getName() + ": VM #" + vmId
-					+ " has been created in Datacenter #" + datacenterId + ", Host #"
-					+ VmList.getById(getVmsCreatedList(), vmId).getHost().getId());
+	//		Log.printLine(CloudSim.clock() + ": " + getName() + ": VM #" + vmId
+	//				+ " has been created in Datacenter #" + datacenterId + ", Host #"
+	//				+ VmList.getById(getVmsCreatedList(), vmId).getHost().getId());
 		} else {
-			Log.printLine(CloudSim.clock() + ": " + getName() + ": Creation of VM #" + vmId
-					+ " failed in Datacenter #" + datacenterId);
+		//	Log.printLine(CloudSim.clock() + ": " + getName() + ": Creation of VM #" + vmId
+		//			+ " failed in Datacenter #" + datacenterId);
 		}
 
 		incrementVmsAcks();
 
+		submitCloudlets();
 		// all the requested VMs have been created
 		if (getVmsCreatedList().size() == getVmList().size() - getVmsDestroyed()) {
-			submitCloudlets();
+	//		submitCloudlets();
 		} else {
 			// all the acks received, but some VMs were not created
 			if (getVmsRequested() == getVmsAcks()) {
@@ -244,13 +469,13 @@ public class DatacenterBroker extends SimEntity {
 				for (int nextDatacenterId : getDatacenterIdsList()) {
 					if (!getDatacenterRequestedIdsList().contains(nextDatacenterId)) {
 						createVmsInDatacenter(nextDatacenterId);
-						return;
+					//	return;
 					}
 				}
 
 				// all datacenters already queried
 				if (getVmsCreatedList().size() > 0) { // if some vm were created
-					submitCloudlets();
+	//				submitCloudlets();
 				} else { // no vms created. abort
 					Log.printLine(CloudSim.clock() + ": " + getName()
 							+ ": none of the required VMs could be created. Aborting");
@@ -273,6 +498,32 @@ public class DatacenterBroker extends SimEntity {
 		Log.printLine(CloudSim.clock() + ": " + getName() + ": Cloudlet " + cloudlet.getCloudletId()
 				+ " received");
 		cloudletsSubmitted--;
+
+// Destroy VM here
+  int vmIndex=0;
+  		for (Vm vm : getVmsCreatedList()) {
+			if (vm.getId()==cloudlet.getVmId()){
+					Log.printLine(CloudSim.clock() + ": " + getName() + ": Destroying VM #" + vm.getId());
+					break;
+		}
+		 vmIndex++;
+		}
+	Vm vm = getVmsCreatedList().get(vmIndex);
+	Log.printLine(CloudSim.clock() + ": " + getName() + ": Destroying VM #" + vm.getId());
+	sendNow(getVmsToDatacentersMap().get(vm.getId()), CloudSimTags.VM_DESTROY, vm);
+	getVmsCreatedList().remove(vmIndex);
+		getVmList().remove(vm);
+
+//see if new VMs can be added
+					//if (!getDatacenterRequestedIdsList().contains(nextDatacenterId)) 
+					{
+					Log.printLine(CloudSim.clock() + ": " + getName() + ": Destroying VM #" + vm.getId());
+					createVmsInDatacenter(getVmsToDatacentersMap().get(vm.getId()));
+					}
+
+
+
+
 		if (getCloudletList().size() == 0 && cloudletsSubmitted == 0) { // all cloudlets executed
 			Log.printLine(CloudSim.clock() + ": " + getName() + ": All Cloudlets executed. Finishing...");
 			clearDatacenters();
@@ -288,6 +539,190 @@ public class DatacenterBroker extends SimEntity {
 		}
 	}
 
+
+ private void processPeriodicEvent(SimEvent ev) {
+    //your code here
+     // invoke job to DC map here based on arrival time
+     // fix VM policy fcfs tag
+     // fix the 
+    // some mechanism for quitting?
+  int [] flag = {0,0,0} ;
+		double curTime = CloudSim.clock();
+// based on cloudlet list arrival times amd dc availability   
+//	Log.printLine(getName() + "ProcessPeriodicEvent(): ");
+   for (Cloudlet cloudlet : getCloudletList()) {
+	double cloudletTime = cloudlet.cloudletArrivalTime;
+//	Log.printLine(getName() + "ProcessPeriodicEvent(): " + curTime + "cloudlet time" + cloudletTime);
+		if(cloudletTime <= curTime)	
+		 { 
+		//	Log.printLine(getName() + "Can start VM for this cloudlet now  " + curTime + "cloudlet time" + cloudletTime);
+		//	vm = VmList.getById(getVmsCreatedList(), cloudlet.getVmId());
+                   // set vm to DC map according to some algo
+		if ( getVmsToDatacentersMap().get(cloudlet.getVmId()) ==null) { 
+		//	Log.printLine(getName() + "Can start VM for this cloudlet, value was null now  " + curTime + "cloudlet time" + cloudletTime);
+// queue to the DC with min free
+	List <Integer> freepesList = new ArrayList<Integer>();
+	for (Integer datacenterId : getDatacenterIdsList()) {
+ 		int freepes1 =((VmAllocationPolicySimple) ((Datacenter)CloudSim.getEntity(datacenterId)).getVmAllocationPolicy()). freeCount;
+//	Log.printLine(getName() + "  **** DC record freepes " + datacenterId +" " +  freepes1);
+		freepesList.add(freepes1); 
+		}
+	int appId = cloudlet.cloudletpe_cloud;
+	Vm vm = VmList.getById(getVmList(), cloudlet.getVmId());
+	int mypes = vm.getNumberOfPes();
+	int peindex = 0;
+
+	if(mypes == 1) peindex = 0;
+	if(mypes == 2) peindex = 1;
+	if(mypes >2 && mypes <=6) peindex = 2;
+	if(mypes >6 && mypes <=12) peindex = 3;
+	if(mypes >12 && mypes <=24) peindex = 4;
+	if(mypes >24 && mypes <=48) peindex = 5;
+	if(mypes == 64) peindex = 6;
+	if(mypes == 128) peindex = 7;
+	if(mypes == 256) peindex = 8;
+	peindex +=3;
+
+// ************************* Policy here 
+	Log.printLine(getName() + "appid  " + appId  + "mype " + mypes+ "peindex" +peindex);
+if (POLICY == 0) { // optimized policy
+	int count =0;
+	double maxEffFreePE =-1; 
+	int maxIndex = 0;
+	for (Integer freepes: freepesList) {
+		if(count ==0) {maxEffFreePE = freepes; if(maxEffFreePE ==0) maxEffFreePE = 8;}
+//else 	if(mypes <=16  &&  freepes/slowdownTable[appId][peindex][count-1] > maxEffFreePE) {
+else 	if(mypes <=48  &&  freepes/slowdownTable[appId][peindex][count-1] > maxEffFreePE) {
+                maxEffFreePE = freepes/slowdownTable[appId][peindex][count-1] ; 
+                 maxIndex = count;
+                   } 
+if(count !=0)  	Log.printLine(getName() + " maxEffFreePE:  " + maxEffFreePE  + "count " +count + "slowdown was " + slowdownTable[appId][peindex][count-1]  );
+		count ++;
+		}
+//	Log.printLine(getName() + " Will start VM for this cloudlet at  " + curTime + " on DC " + maxIndex+2);
+	if (maxIndex !=0) {
+		Log.printLine(getName() + ": Changing exec time from SC to  new dc   for vm "+ cloudlet.getVmId() +" from " +  cloudlet.getCloudletLength()  + " to "  + ((int)( cloudlet.getCloudletLength() * slowdownTable[appId][peindex][maxIndex-1]  )));
+	 cloudlet.setCloudletLength ((int)(cloudlet.getCloudletLength() * slowdownTable[appId][peindex][maxIndex-1] ));
+		}
+// ****************** Policy ENDS
+		getVmsToDatacentersMap().put(cloudlet.getVmId(), maxIndex+2);
+	flag[maxIndex] =1;
+                }
+if (POLICY == 1) { // only SC policy
+	int maxIndex = 0;
+	getVmsToDatacentersMap().put(cloudlet.getVmId(), maxIndex+2);
+	flag[maxIndex] =1;
+}
+if (POLICY == 2) { // only Cluster policy
+	int maxIndex = 1;
+	cloudlet.setCloudletLength ((int)(cloudlet.getCloudletLength() * slowdownTable[appId][peindex][maxIndex-1] ));
+	getVmsToDatacentersMap().put(cloudlet.getVmId(), maxIndex+2);
+	flag[maxIndex] =1;
+}
+if (POLICY == 3) { // only Cloud policy
+	int maxIndex = 2;
+	cloudlet.setCloudletLength ((int)(cloudlet.getCloudletLength() * slowdownTable[appId][peindex][maxIndex-1] ));
+	getVmsToDatacentersMap().put(cloudlet.getVmId(), maxIndex+2);
+	flag[maxIndex] =1;
+}
+if (POLICY == 4) { // Round Robin
+	int maxIndex = 2;
+	maxIndex = cloudlet.getVmId()%3;
+	if (maxIndex !=0) 
+		cloudlet.setCloudletLength ((int)(cloudlet.getCloudletLength() * slowdownTable[appId][peindex][maxIndex-1] ));
+	getVmsToDatacentersMap().put(cloudlet.getVmId(), maxIndex+2);
+	flag[maxIndex] =1;
+}
+if (POLICY == 5) { // static pe based
+	int maxIndex = 0;
+  if (peindex <=5)
+	maxIndex = 1;
+  if (peindex <=3)
+	maxIndex = 2;
+
+  if (maxIndex !=0) 
+		cloudlet.setCloudletLength ((int)(cloudlet.getCloudletLength() * slowdownTable[appId][peindex][maxIndex-1] ));
+	getVmsToDatacentersMap().put(cloudlet.getVmId(), maxIndex+2);
+	flag[maxIndex] =1;
+}
+
+if (POLICY == 6) { // App based
+	int maxIndex = 0;
+  if (appId ==0 || appId==3 || appId ==5) // EP, Jacobi, Nq
+	maxIndex = 2;
+  if (appId == 1 || appId==6 ) // LU, Changa
+	maxIndex = 1;
+
+  if (maxIndex !=0) 
+		cloudlet.setCloudletLength ((int)(cloudlet.getCloudletLength() * slowdownTable[appId][peindex][maxIndex-1] ));
+	getVmsToDatacentersMap().put(cloudlet.getVmId(), maxIndex+2);
+	flag[maxIndex] =1;
+}
+if (POLICY == 7) { // Demand Driven only
+	int count =0;
+	double maxEffFreePE =-1; 
+	int maxIndex = 0;
+
+	for (Integer freepes: freepesList) {
+		if(count ==0) maxEffFreePE = freepes; 
+else 	if(freepes > maxEffFreePE) {
+                maxEffFreePE = freepes ; 
+                 maxIndex = count;
+                   } 
+if(count !=0)  	Log.printLine(getName() + " maxEffFreePE:  " + maxEffFreePE  + "count " +count + "slowdown was " + slowdownTable[appId][peindex][count-1]  );
+		count ++;
+		}
+
+  if (maxIndex !=0) 
+		cloudlet.setCloudletLength ((int)(cloudlet.getCloudletLength() * slowdownTable[appId][peindex][maxIndex-1] ));
+	getVmsToDatacentersMap().put(cloudlet.getVmId(), maxIndex+2);
+	flag[maxIndex] =1;
+}
+
+
+if (POLICY == 8) { // Best first  only
+	int count =0;
+	double maxEffFreePE =-1; 
+	int maxIndex = 0;
+
+	for (Integer freepes: freepesList) {
+		if(mypes<= freepes)  { maxIndex = count;break;}
+
+		if(count ==0) maxEffFreePE = freepes; 
+else 	if(freepes > maxEffFreePE) {
+                maxEffFreePE = freepes ; 
+                 maxIndex = count;
+                   } 
+		count ++;
+		}
+
+  if (maxIndex !=0) 
+		cloudlet.setCloudletLength ((int)(cloudlet.getCloudletLength() * slowdownTable[appId][peindex][maxIndex-1] ));
+	getVmsToDatacentersMap().put(cloudlet.getVmId(), maxIndex+2);
+	flag[maxIndex] =1;
+}
+
+
+
+
+			}
+		}
+	}
+
+for (Integer datacenterId : getDatacenterIdsList()) {
+if(flag[datacenterId-2] ==1)
+   createVmsInDatacenter(datacenterId);
+}
+// change cloudlet
+// only if list not empty
+ if(getCloudletList().size() !=0){
+   float delay = 10; //contains the delay to the next periodic event
+   boolean generatePeriodicEvent = true; //true if new internal events have to be generated
+   if (generatePeriodicEvent) send(getId(),delay,CloudSimTags.PERIODIC_EVENT,getId());
+}
+ }
+
+
 	/**
 	 * Overrides this method when making a new and different type of Broker. This method is called
 	 * by {@link #body()} for incoming unknown tags.
@@ -302,9 +737,15 @@ public class DatacenterBroker extends SimEntity {
 			return;
 		}
 
-		Log.printLine(getName() + ".processOtherEvent(): "
-				+ "Error - event unknown by this DatacenterBroker.");
-	}
+else {
+     int tag = ev.getTag();
+     switch(tag){
+       case CloudSimTags.PERIODIC_EVENT: processPeriodicEvent(ev); break;
+       default: Log.printLine("Warning: "+CloudSim.clock()+":"+this.getName()+": Unknown event ignored. Tag:" +tag);
+     }
+   }
+ }
+
 
 	/**
 	 * Create the virtual machines in a datacenter.
@@ -317,10 +758,12 @@ public class DatacenterBroker extends SimEntity {
 		// send as much vms as possible for this datacenter before trying the next one
 		int requestedVms = 0;
 		String datacenterName = CloudSim.getEntityName(datacenterId);
+	//	Log.printLine(CloudSim.clock() + ": " + getName() + ": Trying to Create VM " + " in # " + datacenterId+" name " + datacenterName);
 		for (Vm vm : getVmList()) {
-			if (!getVmsToDatacentersMap().containsKey(vm.getId())) {
-				Log.printLine(CloudSim.clock() + ": " + getName() + ": Trying to Create VM #" + vm.getId()
-						+ " in " + datacenterName);
+			if (getVmsToDatacentersMap().containsKey(vm.getId()))
+			if (getVmsToDatacentersMap().get(vm.getId()) == datacenterId) {
+			//	Log.printLine(CloudSim.clock() + ": " + getName() + ": Trying to Create VM #" + vm.getId()
+			//			+ " in " + datacenterName);
 				sendNow(datacenterId, CloudSimTags.VM_CREATE_ACK, vm);
 				requestedVms++;
 			}
@@ -348,8 +791,8 @@ public class DatacenterBroker extends SimEntity {
 			} else { // submit to the specific vm
 				vm = VmList.getById(getVmsCreatedList(), cloudlet.getVmId());
 				if (vm == null) { // vm was not created
-					Log.printLine(CloudSim.clock() + ": " + getName() + ": Postponing execution of cloudlet "
-							+ cloudlet.getCloudletId() + ": bount VM not available");
+//					Log.printLine(CloudSim.clock() + ": " + getName() + ": Postponing execution of cloudlet "
+//							+ cloudlet.getCloudletId() + ": bount VM not available");
 					continue;
 				}
 			}
@@ -611,7 +1054,7 @@ public class DatacenterBroker extends SimEntity {
 	 * 
 	 * @param vmsToDatacentersMap the vms to datacenters map
 	 */
-	protected void setVmsToDatacentersMap(Map<Integer, Integer> vmsToDatacentersMap) {
+	public void setVmsToDatacentersMap(Map<Integer, Integer> vmsToDatacentersMap) {
 		this.vmsToDatacentersMap = vmsToDatacentersMap;
 	}
 
